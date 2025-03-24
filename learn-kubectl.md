@@ -15,8 +15,8 @@ kubectl cluster-info
 ```
 Output:
 ```
-Kubernetes control plane is running at https://127.0.0.1:6443
-CoreDNS is running at https://127.0.0.1:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+Kubernetes control plane is running at https://192.168.1.1:6443
+CoreDNS is running at https://192.168.1.1:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
 ```
 
 ### List Nodes (Requires Permission)
@@ -28,48 +28,75 @@ Possible Error Output (If permission is denied):
 Error from server (Forbidden): nodes is forbidden: User "demo@example.com" cannot list resource "nodes" in API group "" at the cluster scope.
 ```
 
-### Get All Services in a Namespace
+## Basic Functions of `kubectl`
+
+### View Cluster Information
+```sh
+kubectl cluster-info
+kubectl get nodes
+```
+
+### Manage Pods
+```sh
+kubectl get pods
+kubectl describe pod <pod-name>
+kubectl logs <pod-name>
+kubectl delete pod <pod-name>
+```
+
+### Manage Services
+```sh
+kubectl get svc
+kubectl describe svc <service-name>
+kubectl delete svc <service-name>
+```
+
+### Manage Deployments
+```sh
+kubectl get deployments
+kubectl describe deployment <deployment-name>
+kubectl delete deployment <deployment-name>
+```
+
+### Port Forwarding (Expose a Service Locally)
+```sh
+kubectl port-forward svc/<service-name> <local-port>:<service-port>
+```
+Example:
+```sh
+kubectl port-forward svc/demo-service 8080:80
+```
+This lets you access `http://localhost:8080` as if you were inside the cluster.
+
+## Example Output for `kubectl get svc`
 ```sh
 kubectl get svc -n default
 ```
 Example Output:
 ```
-NAME                                TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)          AGE
-backend-demo                        NodePort      10.117.71.175   <none>          3001:31739/TCP   88d
-kubernetes                          ClusterIP     10.117.64.1     <none>          443/TCP          376d
-demo-web                            LoadBalancer  10.117.75.22    34.165.251.243  3000:31241/TCP   111d
-demo-service-producer               ClusterIP     10.117.70.114   <none>          9001/TCP         55d
-demo-token-streams                  ClusterIP     10.117.68.183   <none>          9001/TCP         4d2h
+NAME                        TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)         AGE
+backend-demo                NodePort      10.96.1.10      <none>          3001:31234/TCP  50d
+demo-web                    LoadBalancer  10.96.1.20      34.123.45.67    80:31241/TCP    20d
+demo-service-producer       ClusterIP     10.96.1.30      <none>          9001/TCP        10d
 ```
-
-### Port Forward a Service to Local Machine
-```sh
-kubectl -n default port-forward svc/demo-service-producer 9001:9001
-```
-This command forwards traffic from port `9001` on your local machine to port `9001` of `demo-service-producer` running in Kubernetes.
-
-### Describe a Service
-```sh
-kubectl describe svc demo-service-producer -n default
-```
-This provides detailed information about the specified service.
-
-### Delete a Service
-```sh
-kubectl delete svc demo-service-producer -n default
-```
-Deletes the specified service from the cluster.
 
 ## Explanation of `kubectl get svc` Output
 
-| Column         | Description |
-|---------------|-------------|
-| NAME          | The name of the service |
-| TYPE          | Type of service (`ClusterIP`, `NodePort`, `LoadBalancer`) |
-| CLUSTER-IP    | Internal IP address of the service |
-| EXTERNAL-IP   | External IP assigned (if applicable) |
-| PORT(S)       | Ports exposed by the service, with mappings for NodePort |
-| AGE           | How long the service has been running |
+| Column       | Description |
+|-------------|-------------|
+| NAME        | The name of the service |
+| TYPE        | Type of service (`ClusterIP`, `NodePort`, `LoadBalancer`) |
+| CLUSTER-IP  | Internal IP address of the service |
+| EXTERNAL-IP | External IP assigned (if applicable) |
+| PORT(S)     | Ports exposed by the service, with mappings for NodePort |
+| AGE         | How long the service has been running |
+
+## Common Use Cases
+- Checking the health of your cluster
+- Deploying applications
+- Debugging and troubleshooting
+- Scaling applications
+- Managing network access (e.g., port-forwarding)
 
 ## More Resources
 - [Kubernetes Official Docs](https://kubernetes.io/docs/)
