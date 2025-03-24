@@ -11,7 +11,7 @@ Follow the official Kubernetes documentation to install `kubectl`:
 
 ### Check Kubernetes Cluster Information
 ```sh
-kubectl cluster-info
+kubectl cluster-info  # Shows basic information about the cluster
 ```
 Output:
 ```
@@ -21,7 +21,7 @@ CoreDNS is running at https://192.168.1.1:6443/api/v1/namespaces/kube-system/ser
 
 ### List Nodes (Requires Permission)
 ```sh
-kubectl get nodes -o wide
+kubectl get nodes -o wide  # Lists all nodes in the cluster with detailed information
 ```
 Possible Error Output (If permission is denied):
 ```
@@ -32,45 +32,45 @@ Error from server (Forbidden): nodes is forbidden: User "demo@example.com" canno
 
 ### View Cluster Information
 ```sh
-kubectl cluster-info
-kubectl get nodes
+kubectl cluster-info  # Displays the cluster control plane information
+kubectl get nodes  # Lists all available nodes in the cluster
 ```
 
 ### Manage Pods
 ```sh
-kubectl get pods
-kubectl describe pod <pod-name>
-kubectl logs <pod-name>
-kubectl delete pod <pod-name>
+kubectl get pods  # Lists all running pods in the current namespace
+kubectl describe pod <pod-name>  # Shows detailed information about a specific pod
+kubectl logs <pod-name>  # Fetches logs from a specific pod
+kubectl delete pod <pod-name>  # Deletes a specific pod
 ```
 
 ### Manage Services
 ```sh
-kubectl get svc
-kubectl describe svc <service-name>
-kubectl delete svc <service-name>
+kubectl get svc  # Lists all services running in the cluster
+kubectl describe svc <service-name>  # Shows detailed information about a specific service
+kubectl delete svc <service-name>  # Deletes a specific service
 ```
 
 ### Manage Deployments
 ```sh
-kubectl get deployments
-kubectl describe deployment <deployment-name>
-kubectl delete deployment <deployment-name>
+kubectl get deployments  # Lists all deployments in the cluster
+kubectl describe deployment <deployment-name>  # Shows detailed information about a specific deployment
+kubectl delete deployment <deployment-name>  # Deletes a specific deployment
 ```
 
 ### Port Forwarding (Expose a Service Locally)
 ```sh
-kubectl port-forward svc/<service-name> <local-port>:<service-port>
+kubectl port-forward svc/<service-name> <local-port>:<service-port>  # Forwards a service port to local machine
 ```
 Example:
 ```sh
-kubectl port-forward svc/demo-service 8080:80
+kubectl port-forward svc/demo-service 8080:80  # Exposes the service on localhost:8080
 ```
 This lets you access `http://localhost:8080` as if you were inside the cluster.
 
 ## Example Output for `kubectl get svc`
 ```sh
-kubectl get svc -n default
+kubectl get svc -n default  # Lists services in the 'default' namespace
 ```
 Example Output:
 ```
